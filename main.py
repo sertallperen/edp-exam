@@ -26,11 +26,19 @@ class Applicant:
 class Company:
     def __init__(self, name):
         self.name = name
-        
-    def receive_event(self, event):
-        print(f"[{self.name}] Received event: {event}")
 
     def respond_to_application(self, event, accepted, queue):
         result = "Accepted" if accepted else "Rejected"
         response_event = ApplicationResultEvent({"name": event.payload.get("name"), "result": result})
-        queue.append(response_event)
+        queue.append(response_event)   
+    def receive_event(self, event):
+        print(f"[{self.name}] Received event: {event}")
+
+
+
+if __name__ == "__main__":
+    queue = []
+    Applicant = Applicant("Alperen")
+    Company = Company("SertTarim")
+    Applicant.submit_application(Company, "Farmer", queue)
+    Company.respond_to_application(queue[0], False, queue)
