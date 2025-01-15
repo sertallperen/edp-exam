@@ -29,3 +29,8 @@ class Company:
         
     def receive_event(self, event):
         print(f"[{self.name}] Received event: {event}")
+
+    def respond_to_application(self, event, accepted, queue):
+        result = "Accepted" if accepted else "Rejected"
+        response_event = ApplicationResultEvent({"name": event.payload.get("name"), "result": result})
+        queue.append(response_event)
